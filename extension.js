@@ -1,5 +1,5 @@
 'use strict';
-var vscode = require('vscode');
+var vscode = require('./vscode2.js');
 var path = require('path');
 var fs = require('fs');
 var url = require('url');
