@@ -5,87 +5,117 @@ try {
   vscode = require('vscode')
   isVsCode = true
 } catch (error) {
+  // 在非 vscode 的环境中运行程序
   vscode = {
     commands: {
       registerCommand(...arg) {
-        const str = `已注册命令 ${arg.join(`,`)}`
+        let str = `注册成功 ${arg}`
         console.log(str)
         return str
       }
     }
   }
 }
-
-const vscode2 = watchObj(vscode)
+const vscode2 = proxyObj(vscode)
 
 if(isVsCode === false) {
+  // 测试非 vscode 环境下的运行情况
   console.log(
+    vscode2.a.b.attr = 1,
     vscode2.commands.registerCommand(1, 2, 3),
     vscode2.commands.registerCommand2(),
     vscode2.a.b.attr,
     vscode2.a.b.fn(1, 2, 3),
   )
-  vscode2.a.b.c.d.e = 11
 }
-
 
 module.exports = vscode2
 
-/**
- * 查看某个对象的调用情况
- */
-function watchObj(obj) {
-  const rootKey = Symbol(`_isRoot`)
-  obj[rootKey] = true
-  const handler = {
-    get(target, key) {
-      const val = target[key]
-      if(target[rootKey]) {
-        obj[rootKey] = [key]
-      } else {
-        obj[rootKey].push(key)
+function proxyObj(obj) {
+  const newObj = new DeepProxy(obj, {
+    get(target, path, receiver) {
+      const val = Reflect.get(target, path, receiver)
+      if(typeof(val) !== `function`) {
+        proxyLog(`get`, [...this.path, path], {
+          getVal: val,
+        })
       }
-      const pathStr = obj[rootKey].join(`.`)
-
-      // 如果是只读属性, 那么原样返回
-      if(isPropertyWritable(target, key)) {
-        // 如果是函数时记录调用的参数和返回值
-        if(typeof(val) === `function`) {
-          return function (...args) {
-            const res = val.apply(this, args);
-            console.log(`run> ${pathStr} ${typeof(val)} args:${args.join(`,`)} res:${res}`)
-            return res
+      if(val === undefined) {
+        return this.nest(()=>{})
+      } else {
+        // 是否是基本数据类型
+        const isBase = [
+          `string`,
+          `number`,
+          `bigint`,
+          `boolean`,
+          `null`,
+          `undefined`,
+          `symbol`,
+        ].includes(typeof(val))
+        if(isBase) {
+          return val
+        } else {
+          // 只读属性不支持代理
+          if(isPropertyWritable(target, path)) {
+            return this.nest(val)
+          } else {
+            return val
           }
         }
-        
-        console.log(`get> ${pathStr} type:${typeof(val)}`)
-        // 如果是引用类型时, 进行深层代理
-        if(typeof(val) === `object` && val !== null) {
-          return new Proxy(val, handler)
-        }
-      } else {
-        return val
       }
-      // 没有子属性时模板民一个避免报错
-      if(val === undefined) {
-        return new Proxy(() => {}, handler)
-      }
-      return val
+    },
+    apply(target, thisArg, argList) {
+      proxyLog(`run`, this.path, {
+        fnArg: argList,
+        fnRes: undefined,
+      })
+      return target(...argList)
     },
     set(target, key, val) {
-      if(target[rootKey]) {
-        obj[rootKey] = [key]
-      } else {
-        obj[rootKey].push(key)
-        const pathStr = obj[rootKey].join(`.`)
-        console.log(`set> ${obj[rootKey].join(`.`)} type:${typeof(val)}`)
-      }
-      target[key] = val;
-    }
-  }
-  return new Proxy(obj, handler)
+      proxyLog(`set`, [...this.path, key], {
+        setVal: val,
+      })
+      target[key] = val
+    },
+  })
+  return newObj
 }
 
+/**
+ * 在代理函数中打印 log
+ * @param {*} type 
+ * @param {*} path 
+ * @param {*} param2 
+ */
+function proxyLog(type, path, {
+  fnArg, // 函数参数
+  fnRes, // 函数返回值
+  getVal, // 属性值
+  setVal, // 设置值
+}) {
+  try {
+    const pathStr = path.join(`.`)
+    if(type === `set`) {
+      console.log(`${type}> ${pathStr} setVal: ${setVal}`)
+    }
+    if(type === `get` && getVal !== undefined) {
+      console.log(`${type}> ${pathStr} getVal: ${getVal}`)
+    }
+    if(type === `run`) {
+      console.log(`${type}> ${pathStr} fnArg: ${fnArg.join(`,`)} fnRes: ${fnRes}`)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+/**
+ * 判断对象的属性是否可写
+ * @param {*} obj 
+ * @param {*} prop 
+ * @returns 
+ */
 function isPropertyWritable(obj, prop) {
   const value = obj[prop];
   const sym = Symbol();
