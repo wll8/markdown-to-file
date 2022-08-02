@@ -480,6 +480,7 @@
     }
   },
   "scripts": {
+    "build": "vsce package",
     "vscode:prepublish": "node ./src/compile",
     "test": "node ./test/runTest.js"
   },
@@ -487,6 +488,7 @@
     "glob": "^7.1.6",
     "mocha": "^7.1.1",
     "removeNPMAbsolutePaths": "^2.0.0",
+    "vsce": "^2.10.0",
     "vscode-test": "^1.3.0"
   },
   "dependencies": {
