@@ -71,9 +71,9 @@ try {
     },
     commands: {
       // 注册命令
-      registerCommand(cmd, fn) {
-        console.log(`::registerCommand`, cmd, fn)
-        cli.cmd === cmd && fn();
+      registerCommand(out, fn) {
+        console.log(`::registerCommand`, out, fn)
+        ;`extension.markdown-pdf.${cli.out}` === out && fn();
         return ``
       }
     }
