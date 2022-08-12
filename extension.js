@@ -6,6 +6,10 @@ var url = require('url');
 var os = require('os');
 var INSTALL_CHECK = false;
 
+if(global.GET(`isVsCode`) !== true) {
+  activate(global.GET(`util.proxyObj`)({}))
+}
+
 function activate(context) {
   init();
 
