@@ -1,3 +1,4 @@
+const fs = require(`fs`)
 const pkg = require(`./package.json`)
 global.SET = (key, val) => {
   console.log(`SET`, key, val)
@@ -16,8 +17,8 @@ try {
   global.SET(`isVsCode`, true)
 } catch (error) {
   const cli = parseArgv()
-  if(typeof(cli.input) !== `string`) {
-    console.log(`要求 input 参数`)
+  if(typeof(cli.input) !== `string` || fs.existsSync(cli.input) === false) {
+    console.log(`input 参数不正确`)
     process.exit()
   }
   const properties = global.GET(`pkg`).contributes.configuration.properties
