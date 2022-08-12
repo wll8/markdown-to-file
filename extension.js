@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 'use strict';
 var vscode = require('./vscode2.js');
 var path = require('path');

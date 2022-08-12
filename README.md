@@ -1,6 +1,6 @@
 # Markdown PDF
 
-This extension converts Markdown files to pdf, html, png or jpeg files.
+Converts Markdown files to pdf, html, png or jpeg files.
 
 [Japanese README](README.ja.md)
 
@@ -25,6 +25,7 @@ This extension converts Markdown files to pdf, html, png or jpeg files.
 ## Features
 
 Supports the following features
+* [Command line](#command-line)
 * [Syntax highlighting](https://highlightjs.org/static/demo/)
 * [emoji](https://www.webfx.com/tools/emoji-cheat-sheet/)
 * [markdown-it-checkbox](https://github.com/mcecot/markdown-it-checkbox)
@@ -132,6 +133,24 @@ If the download is not successful or you want to avoid downloading every time yo
 <div class="page"/>
 
 ## Usage
+
+### Command line
+``` sh
+npm i -g markdown-to-file
+m2f --input=./README.md --out=pdf
+```
+
+- file entry:
+  - --input markdown file path
+  - --out Specify the output format, pdf/html/png/jpeg/all
+- Override options from command: `markdown-pdf.*`
+  - [outputDirectory](#markdown-pdfoutputdirectory)
+  - [markdown-it-include.enable](#markdown-pdfmarkdown-it-includeenable)
+  - [more...](#options)
+- example:
+  ``` sh
+  m2f --input=./README.md --out=pdf outputDirectory=./mydoc/ markdown-it-include.enable=false
+  ```
 
 ### Command Palette
 

@@ -1,13 +1,18 @@
 {
-  "name": "markdown-pdf",
+  "name": "markdown-to-file",
   "displayName": "Markdown PDF",
   "description": "Convert Markdown to PDF",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "publisher": "yzane",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.0.0"
   },
+  "files": [
+    "*",
+    "!./images/",
+    "!./sample/"
+  ],
   "categories": [
     "Other"
   ],
@@ -34,6 +39,10 @@
     "onLanguage:markdown"
   ],
   "main": "./extension",
+  "bin": {
+    "markdown-to-file": "extension.js",
+    "m2f": "extension.js"
+  },
   "contributes": {
     "commands": [
       {
