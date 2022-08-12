@@ -135,22 +135,26 @@ If the download is not successful or you want to avoid downloading every time yo
 ## Usage
 
 ### Command line
-``` sh
-npm i -g markdown-to-file
-m2f --input=./README.md --out=pdf
+```
+# install
+> npm i -g markdown-to-file
+
+# help
+> m2f
+Usage: m2f <md> [type] [options...]
+       md      -- path to markdown file to convert
+       type    -- Output file format: pdf|html|jpeg|png|all
+       options -- See: https://github.com/wll8/markdown-to-file
+   Eg:
+       m2f README.md
+       m2f README.md html
+       m2f README.md pdf outputDirectory=./mydoc/ markdown-it-include.enable=false
 ```
 
-- file entry:
-  - --input markdown file path
-  - --out Specify the output format, pdf/html/png/jpeg/all
-- Override options from command: `markdown-pdf.*`
+- [Override options](#options) from command: `markdown-pdf.*`
   - [outputDirectory](#markdown-pdfoutputdirectory)
   - [markdown-it-include.enable](#markdown-pdfmarkdown-it-includeenable)
   - [more...](#options)
-- example:
-  ``` sh
-  m2f --input=./README.md --out=pdf outputDirectory=./mydoc/ markdown-it-include.enable=false
-  ```
 
 ### Command Palette
 

@@ -22,15 +22,25 @@ try {
   vscode = require('vscode')
   global.SET(`isVsCode`, true)
 } catch (error) {
-  const cli = parseArgv()
-  if(typeof(cli[`--input`]) !== `string` || fs.existsSync(cli[`--input`]) === false) {
-    print(`--input parameter is incorrect`)
-
-    print(`example:`)
-    print(`m2f --input=./README.md --out=pdf`)
+  let [input, type, ...arg] = process.argv.slice(2)
+  const cli = type ? parseArgv([type, ...arg]) : {}
+  type = type || `pdf`
+  if(typeof(input) !== `string` || fs.existsSync(input) === false) {
+    print(`${pkg.name} v${pkg.version}`)
+    print(``)
+    print(`Converts Markdown files to pdf, html, png or jpeg files.`)
+    print(``)
+    print(`Usage: m2f <md> [type] [options...]`)
+    print(`       md      -- path to markdown file to convert`)
+    print(`       type    -- Output file format: pdf|html|jpeg|png|all`)
+    print(`       options -- See: https://github.com/wll8/markdown-to-file`)
+    print(`   Eg: `)
+    print(`       m2f README.md`)
+    print(`       m2f README.md html`)
+    print(`       m2f README.md pdf outputDirectory=./mydoc/ markdown-it-include.enable=false`)
     process.exit()
   }
-  cli[`--input`] = path.isAbsolute(cli[`--input`]) ? cli[`--input`] : `${process.cwd()}/${cli[`--input`]}`
+  input = path.isAbsolute(input) ? input : `${process.cwd()}/${input}`
   const properties = global.GET(`pkg`).contributes.configuration.properties
   const defaultConfig =  Object.entries(properties).reduce((acc, [key, val]) => {
     acc = deepSet(acc, key, val.default)
@@ -40,7 +50,7 @@ try {
   Object.entries(cli).forEach(([key, val]) => {
     deepSet(userConfig, `markdown-pdf.${key}`, val)
   })
-  print(cli)
+  print(`options:`, cli)
   global.SET(`defaultConfig`, defaultConfig)
   global.SET(`userConfig`, userConfig)
   // 在非 vscode 的环境中运行程序
@@ -70,18 +80,18 @@ try {
         print(`::showWarningMessage`, ...arg)
         return proxyObj(()=>{})
       },
-      setStatusBarMessage(...arg) {
-        print(`::setStatusBarMessage`, ...arg)
+      setStatusBarMessage(title, time) {
+        print(`::setStatusBarMessage`, title)
         return proxyObj(()=>{})
       },
       activeTextEditor: {
         document: {
           uri: {
-            fsPath: cli[`--input`],
+            fsPath: input,
           },
           languageId: `markdown`,
           getText() {
-            return require(`fs`).readFileSync(cli[`--input`], `utf8`)
+            return require(`fs`).readFileSync(input, `utf8`)
           },
         },
       },
@@ -90,7 +100,7 @@ try {
       // 注册命令
       registerCommand(out, fn) {
         console.log(`::registerCommand`, out, fn)
-        ;`extension.markdown-pdf.${cli[`--out`]}` === out && fn();
+        ;`extension.markdown-pdf.${type}` === out && fn();
         return ``
       }
     }
