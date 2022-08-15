@@ -1,13 +1,13 @@
 const fs = require(`fs`)
 const path = require(`path`)
 const pkg = require(`./package.json`)
-console._log = console.log
-console.log = () => {}
+let log = console.log
+log = () => {}
 const print = (...arg) => {
-  console._log(...arg)
+  console.log(...arg)
 }
 global.SET = (key, val) => {
-  console.log(`SET`, key, val)
+  log(`SET`, key, val)
   global[`${pkg.name}_${key}`] = val
   return val
 }
@@ -60,7 +60,7 @@ try {
       file(file) {
         // return 'file:///d%3A/temp/readme_tmp.html'
         const fileUrl = encodeURI(`file:///${file}`.replace(/[\/\\]/g, `/`))
-        console.log(`fileUrl`, fileUrl)
+        log(`fileUrl`, fileUrl)
         return fileUrl
       },
     },
@@ -99,7 +99,7 @@ try {
     commands: {
       // 注册命令
       registerCommand(out, fn) {
-        console.log(`::registerCommand`, out, fn)
+        log(`::registerCommand`, out, fn)
         ;`extension.markdown-pdf.${type}` === out && fn();
         return ``
       }
@@ -199,21 +199,21 @@ function proxyLog(type, path, {
   try {
     const pathStr = path.join(`.`)
     if(type === `set`) {
-      console.log(`${type}> ${pathStr} setVal: ${setVal}`)
+      log(`${type}> ${pathStr} setVal: ${setVal}`)
     }
     if(type === `get` && getVal !== undefined) {
-      console.log(`${type}> ${pathStr} getVal: ${getVal}`)
+      log(`${type}> ${pathStr} getVal: ${getVal}`)
     }
     if(type === `run`) {
-      console.log(`${type}> ${pathStr} fnArg: ${fnArg.filter(item => (typeof(item) !== `function`)).join(`,`)}`)
+      log(`${type}> ${pathStr} fnArg: ${fnArg.filter(item => (typeof(item) !== `function`)).join(`,`)}`)
     }
     {
       const val = setVal || getVal || fnRes
-      typeof(val) !== `function` && console.log(`${type}Val>`, val);
+      typeof(val) !== `function` && log(`${type}Val>`, val);
     }
   
   } catch (error) {
-    // console.log(error)
+    // log(error)
   }
 }
 
