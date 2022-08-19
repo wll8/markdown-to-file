@@ -1,3 +1,5 @@
+This repository modifies [vscode-markdown-pdf](https://github.com/yzane/vscode-markdown-pdf) to add [command line](#command-line) and [docker](https://hub.docker.com/r/bladerunner2020/markdown-to-file) support.
+
 # Markdown PDF
 
 Converts Markdown files to pdf, html, png or jpeg files.
@@ -149,6 +151,9 @@ Usage: m2f <md> [type] [options...]
        m2f README.md
        m2f README.md html
        m2f README.md pdf outputDirectory=./mydoc/ markdown-it-include.enable=false
+
+# docker
+docker run -it --rm  -v "$(pwd)":/data bladerunner2020/markdown-to-file:1.0  sh -c "m2f /data/somefile.md pdf" 
 ```
 
 - [Override options](#options) from command: `markdown-pdf.*`
