@@ -24,6 +24,13 @@ try {
 } catch (error) {
   let [input, type, ...arg] = process.argv.slice(2)
   const cli = type ? parseArgv([type, ...arg]) : {}
+  Object.assign(cli, Object.entries(cli).forEach(([key, val]) =>{
+    ;[
+      `type`,
+      `convertOnSaveExclude`,
+      `styles`,
+    ].includes(key) && (cli[key] = val.split(`,`))
+  }))
   type = type || `pdf`
   if(typeof(input) !== `string` || fs.existsSync(input) === false) {
     print(`${pkg.name} v${pkg.version}`)
@@ -55,15 +62,16 @@ try {
   global.SET(`userConfig`, userConfig)
   // 在非 vscode 的环境中运行程序
   vscode = {
-    Uri: {
-      // 获取某个文件的 file:// 协议地址
-      file(file) {
-        // return 'file:///d%3A/temp/readme_tmp.html'
-        const fileUrl = encodeURI(`file:///${file}`.replace(/[\/\\]/g, `/`))
-        log(`fileUrl`, fileUrl)
-        return fileUrl
-      },
-    },
+    // Uri: {
+    //   // 获取某个文件的 file:// 协议地址
+    //   file(file) {
+    //     // return 'file:///d%3A/temp/readme_tmp.html'
+    //     const fileUrl = encodeURI(`file:///${file}`.replace(/[\/\\]/g, `/`))
+    //     log(`fileUrl`, fileUrl)
+    //     return fileUrl
+    //   },
+    // },
+    Uri: require(`vscode-uri`).URI,
     workspace: {
       getConfiguration(...arg) {
         const [type] = arg
