@@ -2,7 +2,7 @@
   "name": "markdown-to-file",
   "displayName": "Markdown PDF",
   "description": "Convert Markdown to PDF",
-  "version": "1.4.6",
+  "version": "1.5.0",
   "publisher": "yzane",
   "icon": "images/icon.png",
   "engines": {
@@ -171,7 +171,7 @@
         "markdown-pdf.outputDirectoryRelativePathFile": {
           "type": "boolean",
           "default": false,
-          "description": "If markdown-pdf.outputDirectoryRelativePathFile option is set to true, the relative path set with markdown-pdf.styles is interpreted as relative from the file"
+          "description": "If markdown-pdf.outputDirectoryRelativePathFile option is set to true, the relative path set with markdown-pdf.outputDirectory is interpreted as relative from the file"
         },
         "markdown-pdf.styles": {
           "type": "array",
