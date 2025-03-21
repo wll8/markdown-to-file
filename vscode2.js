@@ -22,16 +22,14 @@ try {
   vscode = require('vscode')
   global.SET(`isVsCode`, true)
 } catch (error) {
-  let [input, type, ...arg] = process.argv.slice(2)
-  const cli = type ? parseArgv([type, ...arg]) : {}
+  let [input, type = `pdf`, ...arg] = process.argv.slice(2)
+  const cli = type ? parseArgv([`type=${type}`, ...arg]) : {}
   Object.assign(cli, Object.entries(cli).forEach(([key, val]) =>{
     ;[
-      `type`,
       `convertOnSaveExclude`,
       `styles`,
     ].includes(key) && (cli[key] = val.split(`,`))
   }))
-  type = type || `pdf`
   if(typeof(input) !== `string` || fs.existsSync(input) === false) {
     print(`${pkg.name} v${pkg.version}`)
     print(``)
@@ -108,7 +106,7 @@ try {
       // 注册命令
       registerCommand(out, fn) {
         log(`::registerCommand`, out, fn)
-        ;`extension.markdown-pdf.${type}` === out && fn();
+        ;`extension.markdown-pdf.${cli.type}` === out && fn();
         return ``
       }
     }
