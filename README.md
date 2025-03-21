@@ -158,8 +158,7 @@ Usage: m2f <md> [type] [options...]
        m2f README.md
        m2f README.md html
        m2f README.md pdf outputDirectory=./mydoc/ markdown-it-include.enable=false
-    Entering an array using commas:
-       m2f README.md styles=1.css,2.css -- Using multiple css files.
+       m2f README.md styles=1.css,2.css
 
 # docker
 docker run -it --rm  -v "$(pwd)":/data bladerunner2020/markdown-to-file:1.0  sh -c "m2f /data/somefile.md pdf" 

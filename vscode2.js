@@ -43,6 +43,7 @@ try {
     print(`       m2f README.md`)
     print(`       m2f README.md html`)
     print(`       m2f README.md pdf outputDirectory=./mydoc/ markdown-it-include.enable=false`)
+    print(`       m2f README.md styles=1.css,2.css`)
     process.exit()
   }
   input = path.isAbsolute(input) ? input : `${process.cwd()}/${input}`
