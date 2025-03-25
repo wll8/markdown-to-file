@@ -333,7 +333,7 @@ function makeHtml(data, uri) {
     var title = path.basename(uri.fsPath);
 
     // read template
-    var filename = path.join(__dirname, 'template', 'template.html');
+    var filename = vscode.workspace.getConfiguration('markdown-pdf')['htmlTemplate'] || path.join(__dirname, 'template', 'template.html');
     var template = readFile(filename);
 
     // read mermaid javascripts

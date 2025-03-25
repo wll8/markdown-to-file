@@ -591,6 +591,12 @@ docker run -it --rm  -v "$(pwd)":/data bladerunner2020/markdown-to-file:1.0  sh 
 
 <div class="page"/>
 
+### Other options
+
+#### `markdown-pdf.htmlTemplate`
+  - html template path
+  - Default: ""
+
 ## FAQ
 
 ### How can I change emoji size ?
