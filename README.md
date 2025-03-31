@@ -597,6 +597,10 @@ docker run -it --rm  -v "$(pwd)":/data bladerunner2020/markdown-to-file:1.0  sh 
   - html template path
   - Default: ""
 
+#### `markdown-pdf.outputFilename`
+  - Output file name
+  - Default: ""
+
 ## FAQ
 
 ### How can I change emoji size ?

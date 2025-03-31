@@ -383,7 +383,7 @@ function exportPdf(data, filename, type, uri) {
 
   var StatusbarMessageTimeout = vscode.workspace.getConfiguration('markdown-pdf')['StatusbarMessageTimeout'];
   vscode.window.setStatusBarMessage('');
-  var exportFilename = getOutputDir(filename, uri);
+  var exportFilename = getOutputDir(vscode.workspace.getConfiguration('markdown-pdf')['outputFilename'] || filename, uri);
 
   return vscode.window.withProgress({
     location: vscode.ProgressLocation.Notification,
