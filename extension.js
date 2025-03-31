@@ -96,8 +96,11 @@ async function markdownPdf(option_type) {
         if (types_format.indexOf(type) >= 0) {
           filename = mdfilename.replace(ext, '.' + type);
           var text = editor.document.getText();
-          var content = convertMarkdownToHtml(mdfilename, type, text);
-          var html = makeHtml(content, uri);
+          var html = text
+          if(!ext.startsWith(`.htm`)) {
+            var content = convertMarkdownToHtml(mdfilename, type, text);
+            html = makeHtml(content, uri);
+          }
           await exportPdf(html, filename, type, uri);
         } else {
           showErrorMessage('markdownPdf().2 Supported formats: html, pdf, png, jpeg.');
